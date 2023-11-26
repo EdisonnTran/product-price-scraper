@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../frontend")
 
-@app.route('/')
-def index():
-    return "Hello, World"
+@app.route('/', methods=['GET', 'POST'])
+def tracker():
+    return render_template('tracker.html')
 
 
 if __name__ == "__main__":

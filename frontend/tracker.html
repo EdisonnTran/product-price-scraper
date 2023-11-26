@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %} Tracker {% endblock %}
+
+{% block body %}
+<h1>Tracker</h1>
+
+<form method="POST">
+    <div class="add-to">
+        <label for="add-item">Add an Item to Track</label>
+        <input
+        type="text"
+        class="textbar"
+        id="add-item"
+        name="item-name"
+        placeholder="Product Name"
+        />
+    
+    </div>
+    
+    <br/>
+    <button type="submit">Add</button>
+    <button type="button">Delete</button>
+</form>
+{% endblock %}
