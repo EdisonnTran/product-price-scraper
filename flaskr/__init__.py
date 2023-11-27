@@ -27,12 +27,20 @@ def create_app():
                 db.session.add(new_item)
                 db.session.commit()
                 print(f"{item} added!")
-                
+
             else:
                 print(f"{item} is already on the list!")
         
         items = Item.query.all()
-        
+
+        # Delete from list
+        checklist = request.form.getlist("delList")
+        for selected in checklist:
+            query = Item.query.filter_by(id = selected).first()
+            db.session.delete(query)
+            db.session.commit()
+            print(f"{query.itemName} Deleted!")
+
         return render_template('tracker.html', items=items)
     
     return app
