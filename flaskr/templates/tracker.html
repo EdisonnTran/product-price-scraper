@@ -22,4 +22,14 @@
     <button type="submit">Add</button>
     <button type="button">Delete</button>
 </form>
+
+<div class="item-list">
+    <ul>
+        {% for item in items %}
+            <li> {{ item.itemName }} </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
 {% endblock %}
