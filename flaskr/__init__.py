@@ -18,28 +18,33 @@ def create_app():
 
     @app.route('/', methods=['GET', 'POST'])
     def tracker():
-        if (request.method == 'POST'):
-            item = request.form.get("itemName")
 
-            query = Item.query.filter_by(itemName=item).first()
-            if (not query):
-                new_item = Item(itemName = item)
-                db.session.add(new_item)
-                db.session.commit()
-                print(f"{item} added!")
+        if (request.method == 'POST'):
+
+            if ('delete' not in request.form.keys()):
+                item = request.form.get("itemName")
+                query = Item.query.filter_by(itemName=item).first()
+
+                if (not query):
+                    new_item = Item(itemName = item)
+                    db.session.add(new_item)
+                    db.session.commit()
+                    print(f"{item} added!")
+
+                else:
+                    print(f"{item} is already on the list!")
 
             else:
-                print(f"{item} is already on the list!")
-        
-        items = Item.query.all()
 
-        # Delete from list
-        checklist = request.form.getlist("delList")
-        for selected in checklist:
-            query = Item.query.filter_by(id = selected).first()
-            db.session.delete(query)
-            db.session.commit()
-            print(f"{query.itemName} Deleted!")
+                # Delete from list
+                checklist = request.form.getlist("delList")
+                for selected in checklist:
+                    query = Item.query.filter_by(id = selected).first()
+                    db.session.delete(query)
+                    db.session.commit()
+                    print(f"{query.itemName} Deleted!")
+
+        items = Item.query.all()
 
         return render_template('tracker.html', items=items)
     
