@@ -25,7 +25,7 @@ def create_app():
                 item = request.form.get("itemName")
                 query = Item.query.filter_by(itemName=item).first()
 
-                if (not query):
+                if (not query and item):
                     new_item = Item(itemName = item)
                     db.session.add(new_item)
                     db.session.commit()
