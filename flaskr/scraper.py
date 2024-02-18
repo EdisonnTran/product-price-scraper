@@ -11,7 +11,6 @@ def scrape(item):
     page = 1
     url = f"https://www.amazon.ca/s?k={item}&page={page}"
     page = requests.get(url, headers=headers)
-    # print(page.content)
     
     soup1 = BeautifulSoup(page.content, "html.parser")
     soup = BeautifulSoup(soup1.prettify(), "html.parser")
@@ -21,6 +20,8 @@ def scrape(item):
     except:
         print(f"Can not find number of pages in {item}. Setting to 1.")
         pages = 1
+        
+    ret = set()
     
     for page in range(1, int(pages) + 1):
 
@@ -30,7 +31,7 @@ def scrape(item):
         objs = soup.find_all('div', class_="a-section a-spacing-base")
 
         for obj in objs:
-            
+
             title = obj.find('span', class_="a-size-base-plus a-color-base a-text-normal").get_text().strip()
 
             # there can sometimes be 2 prices in one search (if using obj.find_all), price[0] = sale price, price[1] = old price
@@ -42,5 +43,14 @@ def scrape(item):
                 except:
                     print(title, "failed to find price")
 
-        
-scrape("avocado plush miniso big")
+            link = obj.find_all('a', class_="a-link-normal")[0]['href']
+            linkURL = f"https://amazon.ca/{link}"
+            img = obj.find_all('img', class_="s-image")[0]['src']
+
+            ret.add(tuple([title, price, linkURL, img]))
+
+    return ret
+
+if __name__ == '__main__':
+    ret = scrape("avocado plush miniso big")
+    print(ret)
